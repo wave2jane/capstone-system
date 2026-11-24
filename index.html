@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3730a3">
+<title>CCDI Student Evaluation Portal</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="landing">
+<div class="watermark" aria-hidden="true"></div>
+
+<button id="fsBtn" class="fs-btn" type="button" aria-label="Toggle full screen" title="Full screen">⛶</button>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<main id="app">
+
+  <!-- AUTH -->
+  <section id="view-auth" class="view">
+    <div class="hero">
+      <div class="brand-lockup"><img src="assets/logo.jpg" alt="CCDI school logo" class="brand-logo"><span class="brand-name">Computer Communication<br>Development Institute</span></div>
+      <h1>Student Evaluation<br><span>Portal</span></h1>
+      <p class="hero-subtitle">A simpler way to share feedback and help shape better learning experiences.</p>
+    </div>
+
+    <div class="card auth-card">
+      <div class="auth-intro"><span class="eyebrow">WELCOME TO CCDI</span><h2>Access your account</h2><p>Sign in to continue to your evaluation workspace.</p></div>
+      <div class="tabs" role="tablist">
+        <button class="tab active" id="tab-in" role="tab" aria-selected="true" type="button">Sign In</button>
+        <button class="tab" id="tab-up" role="tab" aria-selected="false" type="button">Sign Up</button>
+      </div>
+
+      <form id="form-in" novalidate>
+        <p id="adminHint" class="mode-note" hidden>Administrator sign-in</p>
+        <label for="in-id" id="in-id-label">Student ID or email</label>
+        <input id="in-id" name="identifier" autocomplete="username" autocapitalize="off" required>
+        <label for="in-pw">Password</label>
+        <div class="pw">
+          <input id="in-pw" name="password" type="password" autocomplete="current-password" required>
+          <button type="button" class="eye" data-target="in-pw" aria-label="Show password">Show</button>
+        </div>
+        <p class="error" id="err-in" role="alert"></p>
+        <button class="btn primary" type="submit">Sign In</button>
+        <button class="link" id="adminToggle" type="button">Administrator sign-in</button>
+      </form>
+
+      <form id="form-up" novalidate hidden>
+        <label for="up-name">Full name</label>
+        <input id="up-name" autocomplete="name" required>
+        <label for="up-email">Student email</label>
+        <input id="up-email" type="email" autocomplete="email" autocapitalize="off" required>
+        <label for="up-sid">Student ID (SID)</label>
+        <input id="up-sid" autocapitalize="characters" autocomplete="off" placeholder="C-2024-00123" required>
+        <label for="up-pw">Password</label>
+        <div class="pw">
+          <input id="up-pw" type="password" autocomplete="new-password" minlength="8" required>
+          <button type="button" class="eye" data-target="up-pw" aria-label="Show password">Show</button>
+        </div>
+        <small class="hint">At least 8 characters with a letter and a number.</small>
+        <label for="up-pw2">Confirm password</label>
+        <input id="up-pw2" type="password" autocomplete="new-password" required>
+        <p class="error" id="err-up" role="alert"></p>
+        <button class="btn primary" type="submit">Create Account</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- COURSE / BLOCK -->
+  <section id="view-section" class="view" hidden>
+    <div class="card narrow">
+      <h2>Select your class</h2>
+      <p class="muted">Choose your course and block to see your professors.</p>
+      <form id="form-section">
+        <label for="sel-course">Course</label>
+        <select id="sel-course" required></select>
+        <label for="sel-block">Block / Section</label>
+        <select id="sel-block" required></select>
+        <p class="error" id="err-section" role="alert"></p>
+        <button class="btn primary" type="submit">Continue</button>
+        <button class="link logout" type="button">Sign out</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- STUDENT DASHBOARD -->
+  <section id="view-student" class="view" hidden>
+    <header class="bar">
+      <div>
+        <h2 id="st-name"></h2>
+        <p class="muted" id="st-meta"></p>
+      </div>
+      <div class="bar-actions">
+        <button class="btn ghost" id="changeSection" type="button">Change class</button>
+        <button class="btn ghost logout" type="button">Sign out</button>
+      </div>
+    </header>
+    <div class="progress-wrap">
+      <div class="progress-label"><span id="progText"></span><span id="termText"></span></div>
+      <div class="progress"><div id="progBar"></div></div>
+    </div>
+    <div id="profGrid" class="grid"></div>
+    <p id="profEmpty" class="muted center" hidden>No professors have been assigned to your class for this term yet.</p>
+  </section>
+
+  <!-- EVALUATION FORM -->
+  <section id="view-eval" class="view" hidden>
+    <div class="card wide">
+      <button class="link back" id="evalBack" type="button">← Back to professors</button>
+      <h2 id="ev-prof"></h2>
+      <p class="muted" id="ev-subject"></p>
+      <form id="form-eval" novalidate></form>
+    </div>
+  </section>
+
+  <!-- ADMIN -->
+  <section id="view-admin" class="view" hidden>
+    <header class="bar">
+      <div>
+        <h2>Administrator</h2>
+        <p class="muted" id="ad-term"></p>
+      </div>
+      <button class="btn ghost logout" type="button">Sign out</button>
+    </header>
+    <nav class="tabs admin-tabs" role="tablist">
+      <button class="tab active" data-tab="assign" type="button">Assignments</button>
+      <button class="tab" data-tab="profs" type="button">Professors</button>
+      <button class="tab" data-tab="evals" type="button">Evaluations</button>
+    </nav>
+
+    <div id="tab-assign" class="panel">
+      <div class="card">
+        <h3>Active term</h3>
+        <form id="form-term" class="row">
+          <input id="term-input" aria-label="Active term" required>
+          <button class="btn primary" type="submit">Save term</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Assign professor to a class</h3>
+        <form id="form-alloc" class="row wrap">
+          <select id="al-prof" aria-label="Professor" required></select>
+          <select id="al-course" aria-label="Course" required></select>
+          <select id="al-block" aria-label="Block" required></select>
+          <input id="al-subject" placeholder="Subject" aria-label="Subject" required>
+          <button class="btn primary" type="submit">Assign</button>
+        </form>
+        <p class="error" id="err-alloc" role="alert"></p>
+      </div>
+      <div class="card">
+        <h3>Current assignments</h3>
+        <div class="table-wrap"><table id="allocTable"></table></div>
+      </div>
+    </div>
+
+    <div id="tab-profs" class="panel" hidden>
+      <div class="card">
+        <h3>Add or rename professor</h3>
+        <form id="form-prof" class="row">
+          <input type="hidden" id="pr-id">
+          <input id="pr-name" placeholder="Professor full name" aria-label="Professor name" required>
+          <button class="btn primary" type="submit">Save</button>
+          <button class="btn ghost" id="pr-cancel" type="button" hidden>Cancel</button>
+        </form>
+        <p class="error" id="err-prof" role="alert"></p>
+      </div>
+      <div class="card">
+        <h3>Professors</h3>
+        <div class="table-wrap"><table id="profTable"></table></div>
+      </div>
+    </div>
+
+    <div id="tab-evals" class="panel" hidden>
+      <div class="card">
+        <h3>Evaluation results</h3>
+        <div class="row wrap">
+          <select id="ev-course" aria-label="Course"></select>
+          <select id="ev-block" aria-label="Block"></select>
+        </div>
+      </div>
+      <div id="evResults"></div>
+    </div>
+  </section>
+
+</main>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
