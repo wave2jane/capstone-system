@@ -26,3 +26,8 @@ PHP 8.1+ · MySQL/MariaDB · vanilla JS (no build step)
 - Administrator: username `admin` and password `admin123` only. An administrator database record is created automatically if none exists.
 - This is **demo-only authentication**, not safe for public deployment. Anyone can access student records by knowing their identifier, and the administrator password is public. Replace it with secure authentication before production use.
 - Login card opacity is 78% so the CCDI logo watermark remains visible.
+
+## Contributors
+John Rey Mariño
+Honeyle Jane Morano
+Jessa Encinas 
